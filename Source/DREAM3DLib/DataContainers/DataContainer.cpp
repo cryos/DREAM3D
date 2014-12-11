@@ -114,6 +114,7 @@ bool DataContainer::doesAttributeMatrixExist(const QString& name)
 AttributeMatrix::Pointer DataContainer::createAndAddAttributeMatrix(QVector<size_t> tDims, const QString& attrMatName, unsigned int attrType)
 {
   AttributeMatrix::Pointer attrMat = AttributeMatrix::New(tDims, attrMatName, attrType);
+  attrMat->setParent(this);
   addAttributeMatrix(attrMatName, attrMat);
   return attrMat; // Return the shared pointer
 }
@@ -131,6 +132,7 @@ void DataContainer::addAttributeMatrix(const QString& name, AttributeMatrix::Poi
     qDebug() << "This action is NOT typical of DREAM3D Usage. Are you sure you want to be doing this? We are forcing the name of the AttributeMatrix to be the same as the key";
     data->setName(name);
   }
+  data->setParent(this);
   m_AttributeMatrices[name] = data;
 }
 

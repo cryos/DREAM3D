@@ -34,8 +34,7 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-DataContainerArray::DataContainerArray() :
-  QObject()
+DataContainerArray::DataContainerArray()
 {
 
 }
@@ -67,6 +66,7 @@ void DataContainerArray::popFront()
 // -----------------------------------------------------------------------------
 void DataContainerArray::pushBack(DataContainer::Pointer f)
 {
+  f->setParent(this);
   m_Array.push_back(f);
 }
 
@@ -75,6 +75,7 @@ void DataContainerArray::pushBack(DataContainer::Pointer f)
 // -----------------------------------------------------------------------------
 void DataContainerArray::addDataContainer(DataContainer::Pointer f)
 {
+  f->setParent(this);
   m_Array.push_back(f);
 }
 
@@ -98,6 +99,7 @@ void DataContainerArray::insert(size_t index, DataContainer::Pointer f)
   {
     ++it;
   }
+  f->setParent(this);
   m_Array.insert(it, f);
 }
 // -----------------------------------------------------------------------------

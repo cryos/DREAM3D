@@ -59,7 +59,7 @@
  * @date Sep 28, 2011
  * @version 1.0
  */
-class DREAM3DLib_EXPORT DataContainerArray : public QObject
+class DREAM3DLib_EXPORT DataContainerArray : public Observable
 {
     Q_OBJECT
 

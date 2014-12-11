@@ -21,6 +21,8 @@
 
 #include "DREAM3DLib/DREAM3DLib.h"
 #include "DREAM3DLib/Common/DREAM3DSetGetMacros.h"
+#include "DREAM3DLib/Common/Observable.h"
+
 
 
 /**
@@ -34,7 +36,7 @@
 * @date Jan 3, 2008
 * @version $Revision: 1.2 $
 */
-class DREAM3DLib_EXPORT IDataArray
+class DREAM3DLib_EXPORT IDataArray : public Observable
 {
   public:
     DREAM3D_SHARED_POINTERS(IDataArray)
