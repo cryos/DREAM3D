@@ -79,6 +79,8 @@ enum RenameErrorCodes
  * @date
  * @version 1.0
  */
+ class DataContainer;
+
 class DREAM3DLib_EXPORT AttributeMatrix : public Observable
 {
   public:
@@ -123,6 +125,14 @@ class DREAM3DLib_EXPORT AttributeMatrix : public Observable
      * @param h5InternalPath
      */
     static void ReadAttributeMatrixStructure(hid_t containerId, DataContainerProxy& dcProxy, QString h5InternalPath);
+
+    /**
+     * @brief ReadAttributeMatrixStructure
+     * @param containerId
+     * @param dataContainer
+     * @param h5InternalPath
+     */
+    static void ReadAttributeMatrixStructure(hid_t containerId, DataContainer* dc, QString h5InternalPath, QString JoeyFindDuplicateFunctions);
 
     /**
      * @brief getPrereqArray
@@ -475,7 +485,7 @@ class DREAM3DLib_EXPORT AttributeMatrix : public Observable
 
     /**
     * @brief creates and returns a copy of the attribute matrix
-    * @return On error, will return a null pointer.  It is the responsibility of the calling function to check for errors and return an error message using the PipelineMessage 
+    * @return On error, will return a null pointer.  It is the responsibility of the calling function to check for errors and return an error message using the PipelineMessage
     */
     virtual AttributeMatrix::Pointer deepCopy();
 

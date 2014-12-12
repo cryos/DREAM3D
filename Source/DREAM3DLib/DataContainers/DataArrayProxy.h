@@ -47,6 +47,8 @@
 #include "DREAM3DLib/Common/Constants.h"
 
 
+class AttributeMatrix;
+class IDataArray;
 
 class DataArrayProxy
 {
@@ -112,6 +114,35 @@ class DataArrayProxy
         DataArrayProxy proxy(h5InternalPath, dataArrayName, DREAM3D::Checked);
 
         herr_t err = QH5Lite::readVectorAttribute(attrMatGid, dataArrayName, DREAM3D::HDF5::TupleDimensions, proxy.tupleDims);
+        if(err < 0) { std::cout << "Error Reading the Tuple Dimensions for DataArray " << dataArrayName.toStdString() << std::endl; }
+
+        err = QH5Lite::readVectorAttribute(attrMatGid, dataArrayName, DREAM3D::HDF5::ComponentDimensions, proxy.compDims);
+        if(err < 0) { std::cout << "Error Reading the Component Dimensions for DataArray " << dataArrayName.toStdString() << std::endl; }
+
+        err = QH5Lite::readScalarAttribute(attrMatGid, dataArrayName, DREAM3D::HDF5::DataArrayVersion, proxy.version);
+        if(err < 0) { std::cout << "Error Reading the Version for DataArray " << dataArrayName.toStdString() << std::endl; }
+
+        err = QH5Lite::readStringAttribute(attrMatGid, dataArrayName, DREAM3D::HDF5::ObjectType, proxy.objectType);
+        if(err < 0) { std::cout << "Error Reading the Object Type for DataArray " << dataArrayName.toStdString() << std::endl; }
+
+        dataArrays.insert(dataArrayName, proxy);
+      }
+    }
+
+    static void ReadDataArrayStructure(hid_t attrMatGid, AttributeMatrix* am, QString h5InternalPath, QString JoeyFindDuplicateFunctions)
+    {
+
+      QList<QString> dataArrayNames;
+      QH5Utilities::getGroupObjects(attrMatGid, H5Utilities::H5Support_DATASET | H5Utilities::H5Support_GROUP, dataArrayNames);
+      foreach(QString dataArrayName, dataArrayNames)
+      {
+        if(__SHOW_DEBUG_MSG__)
+        { std::cout << "        DataArray: " << dataArrayName.toStdString()  << std::endl; }
+
+        IDataArray da(h5InternalPath, dataArrayName, DREAM3D::Checked);
+
+
+        herr_t err = QH5Lite::readVectorAttribute(attrMatGid, dataArrayName, DREAM3D::HDF5::TupleDimensions, da.tupleDims);
         if(err < 0) { std::cout << "Error Reading the Tuple Dimensions for DataArray " << dataArrayName.toStdString() << std::endl; }
 
         err = QH5Lite::readVectorAttribute(attrMatGid, dataArrayName, DREAM3D::HDF5::ComponentDimensions, proxy.compDims);

@@ -129,6 +129,14 @@ class DREAM3DLib_EXPORT DataContainerReader : public AbstractFilter
     DataContainerArrayProxy readDataContainerArrayStructure(const QString &path);
 
     /**
+     * @brief Reads the structure of the DataContainer Array from the hdf5 based .dream3d file. For this method to work
+     * the member variable for the file path should have been set prior to calling this method.
+     * @param path The file path to the DREAm3D file
+     * @return
+     */
+    DataContainerArray::Pointer readDataContainerArrayStructure(const QString &path, QString JoeyFindDuplicateFunctions);
+
+    /**
      * @brief readDataContainerBundles Reads the data Container bundles from the HDF5 file
      * @return
      */

@@ -392,6 +392,87 @@ DataContainerArrayProxy DataContainerReader::readDataContainerArrayStructure(con
   return proxy;
 }
 
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+DataContainerArray::Pointer DataContainerReader::readDataContainerArrayStructure(const QString &path, QString JoeyFindDuplicateFunctions)
+{
+  DataContainerArray::Pointer dca = DataContainerArray::NullPointer();
+  QFileInfo fi(path);
+  if (path.isEmpty() == true)
+  {
+    QString ss = QObject::tr("DREAM3D File Path is empty.");
+    setErrorCondition(-70);
+    notifyErrorMessage(getHumanLabel(), ss, getErrorCondition());
+    return dca;
+  }
+  else if (fi.exists() == false)
+  {
+    QString ss = QObject::tr("The input file does not exist.");
+    setErrorCondition(-388);
+    notifyErrorMessage(getHumanLabel(), ss, getErrorCondition());
+    return dca;
+  }
+
+  herr_t err = 0;
+  hid_t fileId = QH5Utilities::openFile(path, true);
+  if(fileId < 0)
+  {
+    QString ss = QObject::tr("Error opening DREAM3D file location at %1").arg(path);
+    setErrorCondition(-71);
+    notifyErrorMessage(getHumanLabel(), ss, getErrorCondition());
+    return dca;
+  }
+  HDF5ScopedFileSentinel sentinel(&fileId, false); // Make sure the file gets closed automatically if we return early
+
+  //Check the DREAM3D File Version to make sure we are reading the proper version
+  QString d3dVersion;
+  err = QH5Lite::readStringAttribute(fileId, "/", DREAM3D::HDF5::DREAM3DVersion, d3dVersion);
+  if (err < 0)
+  {
+    QString ss = QObject::tr("HDF5 Attribute '%1' was not found on the HDF5 root node and this is required.").arg(DREAM3D::HDF5::DREAM3DVersion);
+    setErrorCondition(-72);
+    notifyErrorMessage(getHumanLabel(), ss, getErrorCondition());
+    return dca;
+  }
+  //  else {
+  //    std::cout << DREAM3D::HDF5::DREAM3DVersion.toStdString() << ":" << d3dVersion.toStdString() << std::endl;
+  //  }
+
+  QString fileVersion;
+  err = QH5Lite::readStringAttribute(fileId, "/", DREAM3D::HDF5::FileVersionName, fileVersion);
+  if (err < 0)
+  {
+    //std::cout << "Attribute '" << DREAM3D::HDF5::FileVersionName.toStdString() << " was not found" << std::endl;
+    QString ss = QObject::tr("HDF5 Attribute '%1' was not found on the HDF5 root node and this is required.").arg(DREAM3D::HDF5::FileVersionName);
+    setErrorCondition(-73);
+    notifyErrorMessage(getHumanLabel(), ss, getErrorCondition());
+    return dca;
+  }
+  //  else {
+  //    std::cout << DREAM3D::HDF5::FileVersionName.toStdString() << ":" << fileVersion.toStdString() << std::endl;
+  //  }
+
+  hid_t dcArrayGroupId = H5Gopen(fileId, DREAM3D::StringConstants::DataContainerGroupName.toAscii().constData(), H5P_DEFAULT);
+  if (dcArrayGroupId < 0)
+  {
+    QString ss = QObject::tr("Error opening HDF5 Group '%1' ").arg(DREAM3D::StringConstants::DataContainerGroupName);
+    setErrorCondition(-74);
+    notifyErrorMessage(getHumanLabel(), ss, getErrorCondition());
+    return dca;
+  }
+  sentinel.addGroupId(&dcArrayGroupId);
+
+
+  QString h5InternalPath = QString("/") + DREAM3D::StringConstants::DataContainerGroupName;
+
+  // Read the entire structure of the file into the proxy
+  DataContainer::ReadDataContainerStructure(dcArrayGroupId, dca.get(), h5InternalPath, JoeyFindDuplicateFunctions);
+  //proxy.isValid = true; // Make the DataContainerArrayProxy valid
+
+  return dca;
+}
+
 
 // -----------------------------------------------------------------------------
 //

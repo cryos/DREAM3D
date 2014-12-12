@@ -111,6 +111,38 @@ void AttributeMatrix::ReadAttributeMatrixStructure(hid_t containerId, DataContai
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+void AttributeMatrix::ReadAttributeMatrixStructure(hid_t containerId, DataContainer* dc, QString h5InternalPath, QString JoeyFindDuplicateFunctions)
+{
+  QList<QString> attributeMatrixNames;
+  QH5Utilities::getGroupObjects(containerId, H5Utilities::H5Support_GROUP, attributeMatrixNames);
+  foreach(QString attributeMatrixName, attributeMatrixNames)
+  {
+    if(__SHOW_DEBUG_MSG__) { std::cout << "    AttributeMatrix: " << attributeMatrixName.toStdString()  << std::endl; }
+    hid_t attrMatGid = H5Gopen(containerId, attributeMatrixName.toAscii().constData(), H5P_DEFAULT);
+    if (attrMatGid < 0) { continue; }
+    HDF5ScopedGroupSentinel sentinel(&attrMatGid, true);
+
+    AttributeMatrix::Pointer am = AttributeMatrix::New(attributeMatrixName);
+    am->setName(attributeMatrixName);
+    am->setFlag(Qt::Checked);
+    herr_t err = QH5Lite::readScalarAttribute(containerId, attributeMatrixName, DREAM3D::StringConstants::AttributeMatrixType, am->amType);
+    if(err < 0) { std::cout << "Error Reading the AttributeMatrix Type for AttributeMatrix " << attributeMatrixName.toStdString() << std::endl; }
+
+    QString h5Path = h5InternalPath + "/" + attributeMatrixName;
+
+    // Read in the names of the Data Arrays that make up the AttributeMatrix
+    DataArrayProxy::ReadDataArrayStructure(attrMatGid, am.get(), h5Path, JoeyFindDuplicateFunctions);
+
+    // Insert the AttributeMatrixProxy proxy into the dataContainer proxy
+    //dcProxy.attributeMatricies.insert(attributeMatrixName, amProxy);
+    am->setParent(dc);
+  }
+}
+
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 void AttributeMatrix::setType(uint32_t value)
 {
   m_Type = value;
