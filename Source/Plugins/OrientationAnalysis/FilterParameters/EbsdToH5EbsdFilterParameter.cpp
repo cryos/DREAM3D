@@ -92,6 +92,8 @@ void EbsdToH5EbsdFilterParameter::readJson(const QJsonObject& json)
   m_Filter->setFileSuffix(json["FileSuffix"].toString());
   m_Filter->setFileExtension(json["FileExtension"].toString());
   m_Filter->setPaddingDigits(json["PaddingDigits"].toInt());
+  m_Filter->setCreateDataContainer(json["CreateDataContainer"].toBool(false));
+  m_Filter->setDataContainerName(json["DataContainerName"].toString("ImageDataContaienr"));
 
   QJsonObject sampleTransObj = json["SampleTransformation"].toObject();
   AxisAngleInput_t sampleTrans;
@@ -119,6 +121,8 @@ void EbsdToH5EbsdFilterParameter::writeJson(QJsonObject& json)
   json["FileSuffix"] = m_Filter->getFileSuffix();
   json["FileExtension"] = m_Filter->getFileExtension();
   json["PaddingDigits"] = m_Filter->getPaddingDigits();
+  json["CreateDataContainer"] = m_Filter->getCreateDataContainer();
+  json["DataContainerName"] = m_Filter->getDataContainerName();
 
   QJsonObject sampleTransObj;
   AxisAngleInput_t sampleTrans = m_Filter->getSampleTransformation();

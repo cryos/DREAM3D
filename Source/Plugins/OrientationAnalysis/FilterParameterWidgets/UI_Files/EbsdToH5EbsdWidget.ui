@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>664</width>
-    <height>648</height>
+    <height>666</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
@@ -578,6 +578,46 @@ font-size: 11px;
        </property>
       </widget>
      </item>
+     <item row="3" column="0" colspan="3">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <property name="spacing">
+        <number>12</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QCheckBox" name="createDataContainer">
+         <property name="text">
+          <string>Create DataContainer</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="dataContainerName">
+         <property name="text">
+          <string>DataContainerName</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
     </layout>
    </item>
   </layout>
@@ -604,5 +644,22 @@ font-size: 11px;
   <tabstop>m_FileListView</tabstop>
  </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>createDataContainer</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>dataContainerName</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>100</x>
+     <y>177</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>486</x>
+     <y>177</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

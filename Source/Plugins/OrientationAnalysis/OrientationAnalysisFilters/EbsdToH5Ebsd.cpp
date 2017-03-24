@@ -66,6 +66,8 @@ EbsdToH5Ebsd::EbsdToH5Ebsd()
 , m_FileSuffix("")
 , m_FileExtension("ang")
 , m_PaddingDigits(4)
+, m_CreateDataContainer(false)
+, m_DataContainerName(SIMPL::Defaults::ImageDataContainerName)
 {
   m_SampleTransformation.angle = 0.0f;
   m_SampleTransformation.h = 0.0f;
@@ -515,6 +517,10 @@ void EbsdToH5Ebsd::execute()
   }
   err = QH5Utilities::closeFile(fileId);
   fileId = -1;
+
+
+
+
   notifyStatusMessage(getHumanLabel(), "Complete");
 }
 

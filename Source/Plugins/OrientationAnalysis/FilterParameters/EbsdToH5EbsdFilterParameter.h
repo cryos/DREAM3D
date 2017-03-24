@@ -56,7 +56,7 @@ public:
   virtual ~EbsdToH5EbsdFilterParameter();
 
   SIMPL_INSTANCE_STRING_PROPERTY(FileExtension)
-    SIMPL_INSTANCE_STRING_PROPERTY(FileType)
+  SIMPL_INSTANCE_STRING_PROPERTY(FileType)
 
   SIMPL_INSTANCE_PROPERTY(EbsdToH5Ebsd*, Filter)
 

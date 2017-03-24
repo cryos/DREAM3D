@@ -159,6 +159,8 @@ void EbsdToH5EbsdWidget::setupGui()
   m_WidgetList << m_InputDir << m_InputDirBtn << m_OutputFile << m_OutputFileBtn;
   m_WidgetList << m_FileExt << m_ErrorMessage << m_TotalDigits;
   m_WidgetList << m_FilePrefix << m_TotalSlices << m_ZStartIndex << m_ZEndIndex << m_zSpacing;
+  m_WidgetList << createDataContainer << dataContainerName;
+
   m_ErrorMessage->setVisible(false);
 
   m_StackingGroup = new QButtonGroup(this);
@@ -203,6 +205,10 @@ void EbsdToH5EbsdWidget::getGuiParametersFromFilter()
 
   m_SampleTransformation = m_Filter->getSampleTransformation();
   m_EulerTransformation = m_Filter->getEulerTransformation();
+
+  createDataContainer->setChecked(m_Filter->getCreateDataContainer());
+  dataContainerName->setText(m_Filter->getDataContainerName());
+  dataContainerName->setVisible(m_Filter->getCreateDataContainer());
 
   foreach(QObject* ob, obs)
   {
@@ -753,6 +759,9 @@ void EbsdToH5EbsdWidget::filterNeedsInputParameters(AbstractFilter* filter)
 
   ebsdConverter->setSampleTransformation(m_SampleTransformation);
   ebsdConverter->setEulerTransformation(m_EulerTransformation);
+
+  ebsdConverter->setCreateDataContainer(createDataContainer->isChecked());
+  ebsdConverter->setDataContainerName(dataContainerName->text());
 }
 
 // -----------------------------------------------------------------------------

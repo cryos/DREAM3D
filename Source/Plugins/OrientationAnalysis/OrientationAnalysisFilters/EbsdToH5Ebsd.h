@@ -82,6 +82,12 @@ class EbsdToH5Ebsd : public AbstractFilter
 
     SIMPL_FILTER_PARAMETER(AxisAngleInput_t, EulerTransformation)
 
+    SIMPL_FILTER_PARAMETER(bool, CreateDataContainer)
+
+    SIMPL_FILTER_PARAMETER(QString, DataContainerName)
+
+
+
     /**
      * @brief getCompiledLibraryName Reimplemented from @see AbstractFilter class
      */
